@@ -1,3 +1,4 @@
+package Y2025.D01;
 
 public class Dial {
     int dialValue;

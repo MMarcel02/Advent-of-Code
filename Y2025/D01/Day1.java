@@ -1,3 +1,4 @@
+package Y2025.D01;
 
 import java.io.File;
 import java.io.BufferedReader;
@@ -5,14 +6,15 @@ import java.io.FileReader;
 import java.io.IOException;
 
 
-public class Main {
+public class Day1
+ {
     public static void main(String[] args) {
         // Need to get a file reader that reads line by line 
         // Parses the direction and the value
         // Then its passed into dial
         // Need to make a dial object that stores state of its own dial, and a count of how many times its 0 
         // Getter of dials count
-        File part1 = new File("./2025/01/DialValues.txt");
+        File part1 = new File("Y2025/D01/DialValues.txt");
         Dial simpleDial = new Dial(50);
 
         try (BufferedReader br = new BufferedReader(new FileReader(part1))) {
