@@ -8,25 +8,31 @@ import java.util.ArrayList;
 
 public class Day3 {
     public static void main(String[] args) {
-        ArrayList<Integer> maxJoltsPerBank = new ArrayList<>();
+        ArrayList<Long> maxJoltsPerBank = new ArrayList<>();
         long total = 0;
 
         try (BufferedReader br = new BufferedReader(new FileReader(new File("Y2025/D03/BatteryBanks.txt")))) {
             String line;
             while ((line = br.readLine()) != null) {
-                int indexOfLargestTens  = indexOfLargestNumberInString(line, true);
+                long largestCombined = 0;
+                int indexOfLargest = -1;
+                String lineAfterLargest = line;
 
-                char largestTens = line.charAt(indexOfLargestTens);
-                String lineAfterLargestTens = line.substring(indexOfLargestTens + 1);
+                // i = 12 Because trying to find largest combined 12 digit number for this assignment
+                for (int i = 12; i > 0; i--) {
+                    lineAfterLargest = lineAfterLargest.substring(indexOfLargest + 1);
+                    
+                    indexOfLargest  = indexOfLargestNumberInString(lineAfterLargest, i);
+                    
+                    char largest = lineAfterLargest.charAt(indexOfLargest);
+                    largestCombined = largestCombined*10 + (largest - '0');
+                }
 
-                int indexOfLargestUnit = indexOfLargestNumberInString(lineAfterLargestTens, false);
-                char largestUnit = lineAfterLargestTens.charAt(indexOfLargestUnit);
-
-                Integer largestCombined = (largestTens - '0')*10 + (largestUnit - '0');
                 maxJoltsPerBank.add(largestCombined);
+
             }
 
-            for (Integer maxJolts : maxJoltsPerBank) {
+            for (Long maxJolts : maxJoltsPerBank) {
                 total += maxJolts;
             }
 
@@ -39,11 +45,10 @@ public class Day3 {
         }
     }
 
-    public static int indexOfLargestNumberInString (String line, boolean checkNumberIsNotLast) {
+    public static int indexOfLargestNumberInString (String line, int currentDigit) {
         for (char i = '9'; i > '0'; i--) {
             int indexOfLargestNumber = line.indexOf(i);
-            // We make sure that the largest number is not the last one in the list for the tens, can be for the singles
-            if (indexOfLargestNumber != -1 && (!checkNumberIsNotLast || (indexOfLargestNumber < line.length() - 1))) {
+            if (indexOfLargestNumber != -1 && (line.length() - indexOfLargestNumber >= currentDigit)) {
                 return indexOfLargestNumber;
             }
         }
