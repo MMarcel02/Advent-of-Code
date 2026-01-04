@@ -11,7 +11,7 @@ import java.util.ArrayList;
 public class Day6 {
     public static void main(String[] args) {
         
-        ArrayList<int[]> rowsList = new ArrayList<>();
+        ArrayList<int[]> parsedRows = new ArrayList<>();
         ArrayList<char[]> rowsCharList = new ArrayList<>();
         char[] symbolArr = null;
         int[] maxLengths = null;
@@ -35,6 +35,9 @@ public class Day6 {
                     for (int i = 1; i < charLine.length; i++) {
                         if (charLine[i] == ' ') {
                             spaces++;
+                            if (i == charLine.length - 1) {
+                                maxLengths[index] = spaces;
+                            }   
                         } else {
                             maxLengths[index] = spaces;
                             index++;
@@ -50,12 +53,14 @@ public class Day6 {
             e.printStackTrace();
         }
 
-        int index = 0;
+        int index = -1;
         for (int maxLen : maxLengths) {
             // System.out.println(maxLen);
-
+            
             // For each column starting from the right
-            for (int j = index + maxLen-1; j >= 0; j--) {
+            int[] parsedNumArr = new int[maxLen];
+            int k = 0;
+            for (int j = index + maxLen; j > index; j--) {
                 // We rewrite the vertical number horizontally
                 int parsedNum = 0;
                 for (char[] row : rowsCharList) {
@@ -63,53 +68,36 @@ public class Day6 {
                         parsedNum = parsedNum*10 + (row[j] - '0');
                     }
                 }
-                System.out.println(parsedNum);
+                parsedNumArr[k] = parsedNum;
+                k++;
             }
-
-
+            parsedRows.add(parsedNumArr);
+            index += maxLen+1;
         }
+
+        long total = 0;
+        
+        for (int i = 0; i < symbolArr.length; i++ ) {
+            long colTotal = 0; 
+            if (symbolArr[i] == '+') {
+                for (int num : parsedRows.get(i)) {
+                    colTotal += num;
+                }
+            }
+            if (symbolArr[i] == '*') {
+                colTotal = 1;
+                for (int num : parsedRows.get(i)) {
+                    colTotal *= num;
+                }
+            }
+            total += colTotal;
+        }
+
+        System.out.println(total);
 
         
 
-        // we have array of 
-
-        // int[][] numbers2DArr = new int[rowsList.get(0).length][rowsList.size()];
-        // char[][] char2D = new
-
-        // int column = 0;
-        // for (int[] row : rowsList) {
-        //     for (int i = 0; i < row.length; i++) {
-        //         numbers2DArr[i][column] = row[i];
-        //     }
-        //     column++;
-        // }
-
-        // long totalAllRows = 0;
-        // for (int i = 0; i < symbolArr.length; i++) {
-        //     long totalInRow = 0;
-
-        //     if (symbolArr[i] == '*') {
-        //         totalInRow = 1;
-        //     }
-        //     for (int number : numbers2DArr[i]) {
-        //         if (symbolArr[i] == '+') {
-        //             totalInRow += number;
-        //         } else if (symbolArr[i] == '*') {
-        //             totalInRow *= number;
-        //         }
-        //     }
-
-        //     totalAllRows += totalInRow;
-        // }
-
-        // System.out.println("Part 1: " + totalAllRows);
-
-        // // Part 2: Cephalopod Numbers - reading the problems right-to-left one column at a time
-
-        // int[][] cephalopodNum2DArr = new int[rowsList.get(0).length][rowsList.size()];
-        // for (int[] row : numbers2DArr) {
-
-        // }
+        
 
     }
 }
